@@ -72,11 +72,16 @@ export function ScrollyCanvas({
     if (canvasRatio > imgRatio) {
       renderWidth = width;
       renderHeight = width / imgRatio;
-      offsetY = (height - renderHeight) / 2;
+      // On mobile (narrow viewport), anchor to top so the full figure shows
+      offsetY = width < 640 ? 0 : (height - renderHeight) / 2;
     } else {
       renderHeight = height;
       renderWidth = height * imgRatio;
       offsetX = (width - renderWidth) / 2;
+      // On mobile, shift up slightly so the face isn't cropped too tight
+      if (width < 640) {
+        offsetX = -(renderWidth - width) * 0.5;
+      }
     }
 
     // Fill background with exact matching dark hex before drawing
